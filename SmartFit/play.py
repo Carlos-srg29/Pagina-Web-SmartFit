@@ -245,7 +245,7 @@ def iniciar_sesion():
 def main():
     while True:
         print("\n==========================================")
-        print("        GYMFIT - SISTEMA PRINCIPAL       ")
+        print("        GymFIT - SISTEMA PRINCIPAL       ")
         print("==========================================")
         print("1. Registrarse")
         print("2. Iniciar sesión")
@@ -257,7 +257,7 @@ def main():
         elif opcion == "2":
             iniciar_sesion()
         elif opcion == "3":
-            print("\nGracias por usar GymFit. ¡Hasta pronto!")
+            print("\nGracias por usar GymtFit. ¡Hasta pronto!")
             break
         else:
             print("\nOpción inválida. Intente de nuevo.")
