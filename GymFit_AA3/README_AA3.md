@@ -35,4 +35,18 @@ Para que WhatsApp dirija a un número específico, configura `WHATSAPP_NUMBER` e
 
 ## Render
 
-La carpeta para configurar como directorio raíz del servicio es `GymFit_AA2` si se mezcla con el repositorio original. El comando de instalación es `pip install -r requirements-render.txt` y el comando de inicio es `gunicorn app:app`. Configura `SECRET_KEY`, `ADMIN_EMAIL`, `ADMIN_PASSWORD`, `TRAINER_EMAIL`, `TRAINER_PASSWORD` y `WHATSAPP_NUMBER` en Render. No publiques contraseñas reales en GitHub.
+Configura el servicio de Render con estos valores:
+
+| Campo | Valor |
+| --- | --- |
+| Root Directory | `GymFit_AA3` |
+| Build Command | `pip install -r requirements-render.txt` |
+| Start Command | `gunicorn app:app` |
+
+El directorio raíz debe ser `GymFit_AA3`: si apuntas a `GymFit_AA2` o a la raíz del repositorio, Render despliega otro proyecto o no encuentra `requirements.txt`.
+
+`gunicorn` también está incluido en `requirements.txt`, así que el deploy funciona incluso si dejas el comando de build por defecto de Render (`pip install -r requirements.txt`).
+
+Variables de entorno obligatorias: `SECRET_KEY`, `ADMIN_PASSWORD` y `TRAINER_PASSWORD`; sin ellas la aplicación no arranca en Render. Opcionales: `ADMIN_EMAIL`, `TRAINER_EMAIL` y `WHATSAPP_NUMBER`. No publiques contraseñas reales en GitHub.
+
+La base de datos SQLite vive en el disco efímero de Render, por lo que se reinicia en cada deploy. Para conservar los datos, monta un disco persistente en `/var/data` y define `DATABASE_PATH=/var/data/gymfit.db`.
