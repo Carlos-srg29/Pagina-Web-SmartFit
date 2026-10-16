@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#17365d">
+    <meta name="description" content="GymFit: seguimiento sencillo de rutinas y clientes de gimnasio.">
+    <title>GymFit | Sistema de gimnasio</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <header class="site-header">
+        <a class="brand" href="/" aria-label="GymFit, inicio">
+            <span class="brand-mark" aria-hidden="true">G</span>
+            <span class="brand-copy"><strong>GYMFIT</strong><small>Sistema de gimnasio</small></span>
+        </a>
+        <div class="header-right">
+            <span class="prototype-label"><span class="status-dot"></span> Plataforma de entrenamiento</span>
+            <span id="header-user" class="header-user hidden"></span>
+        </div>
+    </header>
+
+    <main class="page-shell">
+        <section id="public-view" class="auth-layout">
+            <div class="welcome-panel">
+                <span class="eyebrow">PROYECTO DE GIMNASIO</span>
+                <h1>Organiza tus<br><span>entrenamientos.</span></h1>
+                <p class="welcome-text">Elige tu objetivo y registra tus entrenamientos.</p>
+                <div class="welcome-points">
+                    <div class="welcome-point"><span class="point-icon">01</span><span><strong>Define tu objetivo</strong><small>Bajar de peso o aumentar masa muscular.</small></span></div>
+                    <div class="welcome-point"><span class="point-icon">02</span><span><strong>Consulta tu rutina</strong><small>Ejercicios organizados por nivel.</small></span></div>
+                    <div class="welcome-point"><span class="point-icon">03</span><span><strong>Revisa tu avance</strong><small>Guarda tus sesiones y minutos entrenados.</small></span></div>
+                </div>
+                <div class="welcome-footnote"><span class="mini-line"></span> Proyecto para Fundamentos de Desarrollo de Software.</div>
+            </div>
+
+            <div class="auth-card">
+                <div class="auth-heading">
+                    <span class="eyebrow">ACCESO AL SISTEMA</span>
+                    <h2>Ingresa a tu cuenta</h2>
+                    <p>Inicia sesión o regístrate como cliente.</p>
+                </div>
+                <div class="auth-tabs" role="tablist" aria-label="Acceso">
+                    <button class="auth-tab active" type="button" data-auth-tab="login" role="tab" aria-selected="true">Iniciar sesión</button>
+                    <button class="auth-tab" type="button" data-auth-tab="register" role="tab" aria-selected="false">Crear cuenta</button>
+                </div>
+
+                <form id="login-form" class="form-stack">
+                    <label for="login-email">Correo electrónico</label>
+                    <input id="login-email" name="correo" type="email" autocomplete="username" placeholder="correo@ejemplo.com" required>
+                    <label for="login-password">Contraseña</label>
+                    <input id="login-password" name="password" type="password" autocomplete="current-password" placeholder="Tu contraseña" required>
+                    <button class="button button-primary full-width" type="submit">Iniciar sesión</button>
+                    <p class="form-hint">Tu pantalla se mostrará de acuerdo con el tipo de cuenta.</p>
+                </form>
+
+                <form id="register-form" class="form-stack hidden">
+                    <div class="form-grid two-cols">
+                        <div><label for="reg-nombre">Nombre</label><input id="reg-nombre" name="nombre" type="text" autocomplete="given-name" required maxlength="60" placeholder="Tu nombre"></div>
+                        <div><label for="reg-apellido">Apellido</label><input id="reg-apellido" name="apellido" type="text" autocomplete="family-name" required maxlength="60" placeholder="Tu apellido"></div>
+                    </div>
+                    <label for="reg-email">Correo electrónico</label>
+                    <input id="reg-email" name="correo" type="email" autocomplete="email" required placeholder="correo@ejemplo.com">
+                    <label for="reg-password">Crea una contraseña</label>
+                    <input id="reg-password" name="password" type="password" autocomplete="new-password" minlength="8" required placeholder="Mínimo 8 caracteres">
+                    <div class="form-grid three-cols">
+                        <div><label for="reg-edad">Edad</label><input id="reg-edad" name="edad" type="number" min="14" max="100" required placeholder="Años"></div>
+                        <div><label for="reg-peso">Peso (kg)</label><input id="reg-peso" name="peso" type="number" min="25" max="300" step="0.1" placeholder="Opcional"></div>
+                        <div><label for="reg-estatura">Estatura (cm)</label><input id="reg-estatura" name="estatura" type="number" min="100" max="250" step="0.1" placeholder="Opcional"></div>
+                    </div>
+                    <div class="form-grid two-cols">
+                        <div><label for="reg-objetivo">Objetivo</label><select id="reg-objetivo" name="objetivo"><option value="">Elegir después</option><option value="Bajar de peso">Bajar de peso</option><option value="Aumentar masa muscular">Aumentar masa muscular</option></select></div>
+                        <div><label for="reg-nivel">Nivel</label><select id="reg-nivel" name="nivel"><option value="">Elegir después</option><option value="Fácil">Fácil</option><option value="Básico">Básico</option><option value="Avanzado">Avanzado</option></select></div>
+                    </div>
+                    <button class="button button-primary full-width" type="submit">Crear mi cuenta <span aria-hidden="true">→</span></button>
+                    <p class="form-hint">El registro público crea cuentas de cliente. El administrador puede crear cuentas para entrenadores.</p>
+                </form>
+                <div id="auth-message" class="notice hidden" role="status"></div>
+            </div>
+        </section>
+
+        <section id="app-view" class="hidden">
+            <div class="dashboard-heading">
+                <div><span class="eyebrow" id="role-eyebrow">MI ESPACIO</span><h1 id="dashboard-title">Hola</h1><p id="dashboard-subtitle">Gestiona tus datos y revisa tu avance.</p></div>
+                <button id="logout-button" class="button button-outline" type="button">Cerrar sesión</button>
+            </div>
+
+            <section id="client-view" class="hidden role-panel">
+                <div class="metric-grid">
+                    <article class="metric-card"><span class="metric-label">Objetivo actual</span><strong id="client-metric-goal">Sin definir</strong><small>Tu meta de entrenamiento</small></article>
+                    <article class="metric-card"><span class="metric-label">Nivel</span><strong id="client-metric-level">Sin definir</strong><small>Intensidad de referencia</small></article>
+                    <article class="metric-card"><span class="metric-label">Entrenamientos</span><strong id="client-metric-count">0</strong><small>Sesiones registradas</small></article>
+                    <article class="metric-card"><span class="metric-label">Tiempo entrenado</span><strong><span id="client-metric-minutes">0</span> <small>min</small></strong><small>Minutos acumulados</small></article>
+                </div>
+
+                <div class="content-grid client-grid">
+                    <section class="panel-card">
+                        <div class="panel-title"><div><span class="eyebrow">DATOS PERSONALES</span><h2>Mi perfil</h2></div><span class="panel-symbol">↗</span></div>
+                        <p class="panel-description">Puedes revisar y actualizar tus datos de entrenamiento.</p>
+                        <form id="profile-form" class="form-stack">
+                            <div class="form-grid two-cols">
+                                <div><label for="profile-name">Nombre</label><input id="profile-name" type="text" readonly></div>
+                                <div><label for="profile-email">Correo</label><input id="profile-email" type="email" readonly></div>
+                            </div>
+                            <div class="form-grid three-cols">
+                                <div><label for="profile-age">Edad</label><input id="profile-age" type="number" min="14" max="100" required></div>
+                                <div><label for="profile-weight">Peso (kg)</label><input id="profile-weight" type="number" min="25" max="300" step="0.1" placeholder="Opcional"></div>
+                                <div><label for="profile-height">Estatura (cm)</label><input id="profile-height" type="number" min="100" max="250" step="0.1" placeholder="Opcional"></div>
+                            </div>
+                            <label for="profile-goal">¿Cuál es tu objetivo?</label>
+                            <select id="profile-goal" required><option value="">Selecciona una opción</option><option value="Bajar de peso">Bajar de peso</option><option value="Aumentar masa muscular">Aumentar masa muscular</option></select>
+                            <label for="profile-level">Nivel de entrenamiento</label>
+                            <select id="profile-level" required><option value="">Selecciona tu nivel</option><option value="Fácil">Fácil · Estoy empezando</option><option value="Básico">Básico · Ya conozco algunos ejercicios</option><option value="Avanzado">Avanzado · Entreno de forma regular</option></select>
+                            <div id="profile-imc" class="inline-info hidden"></div>
+                            <button class="button button-primary" type="submit">Guardar mis datos</button>
+                        </form>
+                    </section>
+
+                    <section class="panel-card routine-card">
+                        <div class="panel-title"><div><span class="eyebrow">PLAN DE ENTRENAMIENTO</span><h2>Mi rutina</h2></div><span class="panel-symbol">✳</span></div>
+                        <p class="panel-description">Ejercicios sugeridos según tu objetivo y nivel.</p>
+                        <div id="routine-empty" class="empty-state"><span class="empty-icon">＋</span><strong>Tu rutina aparecerá aquí</strong><p>Guarda primero tu objetivo y tu nivel en el perfil.</p></div>
+                        <div id="routine-content" class="hidden">
+                            <div class="routine-summary"><span id="routine-goal"></span><strong id="routine-duration"></strong></div>
+                            <div class="step-counter"><span id="step-label">Ejercicio 1</span><span id="step-count">1 de 4</span></div>
+                            <div class="progress-track"><span id="routine-progress"></span></div>
+                            <div class="exercise-stage"><span class="exercise-number" id="exercise-number">01</span><h3 id="exercise-name">Ejercicio</h3><p id="exercise-instruction">Sigue las indicaciones con un ritmo cómodo y una técnica correcta.</p></div>
+                            <div class="routine-actions"><button id="prev-exercise" class="button button-outline" type="button" disabled>Anterior</button><button id="next-exercise" class="button button-primary" type="button">Siguiente ejercicio →</button></div>
+                            <ol id="routine-list" class="routine-list"></ol>
+                        </div>
+                    </section>
+                </div>
+
+                <section class="panel-card history-panel">
+                    <div class="panel-title"><div><span class="eyebrow">SEGUIMIENTO</span><h2>Mi historial</h2></div><span class="panel-symbol">◷</span></div>
+                    <p class="panel-description">Anota los minutos que entrenaste para guardar tu sesión.</p>
+                    <form id="workout-form" class="workout-form">
+                        <div><label for="workout-minutes">Minutos entrenados</label><input id="workout-minutes" type="number" min="1" max="600" required placeholder="Ej. 45"></div>
+                        <button class="button button-primary" type="submit">Registrar sesión</button>
+                    </form>
+                    <div id="client-history" class="history-list"><p class="muted-text">Todavía no has registrado entrenamientos.</p></div>
+                </section>
+            </section>
+
+            <section id="trainer-view" class="hidden role-panel">
+                <div class="metric-grid trainer-metrics">
+                    <article class="metric-card"><span class="metric-label">Clientes asignados</span><strong id="trainer-client-count">0</strong><small>Personas a tu cargo</small></article>
+                    <article class="metric-card"><span class="metric-label">Sesiones registradas</span><strong id="trainer-workout-count">0</strong><small>Actividad de tus clientes</small></article>
+                    <article class="metric-card"><span class="metric-label">Minutos registrados</span><strong id="trainer-minute-count">0</strong><small>Tiempo acumulado del grupo</small></article>
+                </div>
+                <section class="panel-card">
+                    <div class="panel-title"><div><span class="eyebrow">SEGUIMIENTO DE CLIENTES</span><h2>Mis clientes</h2></div><span class="panel-symbol">⌕</span></div>
+                    <div class="table-toolbar"><p class="panel-description">Consulta los datos de tus clientes asignados.</p><input id="trainer-search" type="search" placeholder="Buscar cliente…" aria-label="Buscar cliente"></div>
+                    <div id="trainer-client-list" class="people-list"><div class="empty-state"><strong>Cargando clientes…</strong></div></div>
+                </section>
+                <div id="trainer-history-detail" class="panel-card hidden history-detail"></div>
+            </section>
+
+            <section id="admin-view" class="hidden role-panel">
+                <div class="metric-grid admin-metrics">
+                    <article class="metric-card"><span class="metric-label">Cuentas totales</span><strong id="admin-total-users">0</strong><small>Todos los perfiles</small></article>
+                    <article class="metric-card"><span class="metric-label">Clientes activos</span><strong id="admin-total-clients">0</strong><small>Usuarios del gimnasio</small></article>
+                    <article class="metric-card"><span class="metric-label">Entrenadores activos</span><strong id="admin-total-trainers">0</strong><small>Equipo de entrenamiento</small></article>
+                    <article class="metric-card"><span class="metric-label">Cuentas desactivadas</span><strong id="admin-total-inactive">0</strong><small>Se pueden reactivar</small></article>
+                </div>
+
+                <div class="content-grid admin-grid">
+                    <section class="panel-card">
+                        <div class="panel-title"><div><span class="eyebrow">GESTIÓN DE ACCESOS</span><h2>Crear una cuenta</h2></div><span class="panel-symbol">＋</span></div>
+                        <p class="panel-description">Registra a una persona como cliente o entrenador.</p>
+                        <form id="admin-create-form" class="form-stack">
+                            <div class="form-grid two-cols"><div><label for="admin-new-name">Nombre</label><input id="admin-new-name" required maxlength="60"></div><div><label for="admin-new-lastname">Apellido</label><input id="admin-new-lastname" required maxlength="60"></div></div>
+                            <label for="admin-new-email">Correo electrónico</label><input id="admin-new-email" type="email" required>
+                            <div class="form-grid two-cols"><div><label for="admin-new-age">Edad</label><input id="admin-new-age" type="number" min="14" max="100" required></div><div><label for="admin-new-role">Tipo de cuenta</label><select id="admin-new-role" required><option value="cliente">Cliente</option><option value="entrenador">Entrenador</option></select></div></div>
+                            <label for="admin-new-password">Contraseña temporal</label><input id="admin-new-password" type="password" minlength="8" required placeholder="Mínimo 8 caracteres">
+                            <div id="admin-assignment-field"><label for="admin-new-trainer">Entrenador asignado</label><select id="admin-new-trainer"><option value="">Asignar automáticamente</option></select></div>
+                            <button class="button button-primary" type="submit">Crear cuenta</button>
+                            <p class="form-hint">Una cuenta desactivada ya no podrá iniciar sesión.</p>
+                        </form>
+                    </section>
+
+                    <section class="panel-card admin-users-panel">
+                        <div class="panel-title"><div><span class="eyebrow">VISTA GENERAL</span><h2>Usuarios del sistema</h2></div><span class="panel-symbol">☷</span></div>
+                        <div class="table-toolbar"><p class="panel-description">Consulta los usuarios y administra sus cuentas.</p><input id="admin-search" type="search" placeholder="Buscar usuario…" aria-label="Buscar usuario"></div>
+                        <div class="filter-row"><label for="admin-role-filter">Mostrar</label><select id="admin-role-filter"><option value="todos">Todos los roles</option><option value="cliente">Clientes</option><option value="entrenador">Entrenadores</option><option value="admin">Administradores</option></select><label for="admin-status-filter">Estado</label><select id="admin-status-filter"><option value="todos">Todos</option><option value="activos">Activos</option><option value="inactivos">Desactivados</option></select></div>
+                        <div class="table-scroll"><table class="data-table"><thead><tr><th>Usuario</th><th>Rol</th><th>Datos</th><th>Entrenador</th><th>Estado</th><th>Acciones</th></tr></thead><tbody id="admin-users-body"><tr><td colspan="6">Cargando información…</td></tr></tbody></table></div>
+                    </section>
+                </div>
+                <section id="admin-history-detail" class="panel-card hidden history-detail"></section>
+            </section>
+        </section>
+
+        <footer class="site-footer"><span>GYMFIT · Proyecto académico de desarrollo de software</span><span>Clientes · Rutinas · Seguimiento</span></footer>
+    </main>
+
+    <a id="whatsapp-button" class="whatsapp-button" href="#" aria-label="Contactar por WhatsApp">
+        <span class="whatsapp-icon" aria-hidden="true">✆</span><span>Contacto por WhatsApp</span>
+    </a>
+    <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+
+    <script>
+        window.GYMFIT_WHATSAPP = {{ whatsapp_number|tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='app.js') }}" defer></script>
+</body>
+</html>
